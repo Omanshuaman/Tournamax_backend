@@ -2,7 +2,8 @@ const asyncHandler = require("express-async-handler");
 const generateToken = require("../config/generateToken");
 const User = require("../models/userModel");
 const express = require("express");
-
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, pic } = req.body;
 
@@ -18,25 +19,28 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("User already exists.");
   }
 
-  const user = await User.create({
-    name,
-    email,
-    password,
-    pic,
-  });
-
-  if (user) {
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      pic: user.pic,
-      token: generateToken(user._id),
+  bcrypt.hash(password, saltRounds, function (err, hash) {
+    const newUser = new User({
+      name: name,
+      email: email,
+      password: hash,
     });
-  } else {
-    res.status(400);
-    throw new Error("Failed to create user.");
-  }
+
+    newUser.save(function (err) {
+      if (err) {
+        res.status(400);
+        throw new Error("Failed to create user.");
+      } else {
+        res.status(201).json({
+          _id: newUser._id,
+          name: newUser.name,
+          email: newUser.email,
+          pic: newUser.pic,
+          token: generateToken(newUser._id),
+        });
+      }
+    });
+  });
 });
 
 const authUser = asyncHandler(async (req, res) => {

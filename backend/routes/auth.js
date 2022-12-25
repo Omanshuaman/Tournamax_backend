@@ -10,7 +10,7 @@ router.get("/login/success", (req, res) => {
       success: true,
       message: "successfull",
       user: req.user,
-      //   cookies: req.cookies
+      cookies: req.cookies,
     });
   }
 });
@@ -27,12 +27,15 @@ router.get("/logout", (req, res) => {
   res.redirect(CLIENT_URL);
 });
 
-router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["openid", "email", "profile"] })
+);
 
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    successRedirect: CLIENT_URL1,
+    successRedirect: CLIENT_URL,
     failureRedirect: "/login/failed",
   })
 );
