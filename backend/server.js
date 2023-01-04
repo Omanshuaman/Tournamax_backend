@@ -11,8 +11,11 @@ const cookieSession = require("cookie-session");
 const authRoute = require("./routes/auth");
 const pinRoute = require("./routes/pins");
 const posterRoutes = require("./routes/posterRoutes");
+const session = require("express-session");
+const bodyParser = require("body-parser");
 
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
+const CLIENT_URL = "https://tournamaxsports.com";
 
 dotenv.config();
 connectDB();
@@ -26,17 +29,53 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(
-  cors()
-  //   {
-  //   origin: "http://localhost:3000",
-  //   // origin: "https://tournamax-frontend.vercel.app",
+  cors({
+    origin: "http://localhost:3000",
+    origin: "https://tournamaxsports.com",
 
-  //   methods: "GET,POST,PUT,DELETE",
-  //   credentials: true,
-  // }
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
 );
 
-app.use("/auth", authRoute);
+app.get("/auth/login/success", (req, res) => {
+  if (req.user) {
+    res.status(200).json({
+      success: true,
+      message: "successfull",
+      user: req.user,
+      //  cookies: req.cookies,
+    });
+  }
+});
+
+app.get("/auth/login/failed", (req, res) => {
+  res.status(401).json({
+    success: false,
+    message: "failure",
+  });
+});
+
+app.get("/auth/logout", (req, res) => {
+  req.logout();
+  res.redirect(CLIENT_URL);
+});
+
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["openid", "email", "profile"] })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  function (req, res) {
+    // Successful authentication, redirect to secrets.
+    console.log(req.user);
+    //   localStorage.setItem("userInfo", JSON.stringify(user));
+    res.redirect(CLIENT_URL);
+  }
+);
 
 app.use(express.json()); // to accept json data
 
