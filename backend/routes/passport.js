@@ -12,16 +12,10 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",
+      callbackURL: "https://tournamaxsports.com/api/auth/google/callback",
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
     function (accessToken, refreshToken, profile, cb) {
-      // const id = profile.id;
-      // const email = profile.emails[0].value;
-      // const firstName = profile.name.givenName;
-      // const lastName = profile.name.familyName;
-      // const profilePhoto = profile.photos[0].value;
-      // const source = "google";
       User.findOrCreate(
         {
           googleId: profile.id,

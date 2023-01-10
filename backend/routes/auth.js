@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const passport = require("passport");
+const Pin = require("../models/pin");
 
-const CLIENT_URL = "http://localhost:3000";
+const CLIENT_URL = "https://tournamaxsports.com";
 const CLIENT_URL1 = "http://localhost:3000/chats";
 
 router.get("/login/success", (req, res) => {
@@ -10,7 +11,7 @@ router.get("/login/success", (req, res) => {
       success: true,
       message: "successfull",
       user: req.user,
-   //  cookies: req.cookies,
+      //  cookies: req.cookies,
     });
   }
 });
@@ -34,10 +35,13 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", {
-    successRedirect: CLIENT_URL,
-    failureRedirect: "/login/failed",
-  })
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  function (req, res) {
+    // Successful authentication, redirect to secrets.
+    console.log(req.user);
+    //   localStorage.setItem("userInfo", JSON.stringify(user));
+    res.redirect(CLIENT_URL);
+  }
 );
 
 module.exports = router;
