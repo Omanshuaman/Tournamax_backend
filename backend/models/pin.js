@@ -2,26 +2,17 @@ const mongoose = require("mongoose");
 
 const PinSchema = new mongoose.Schema(
   {
-    username: {
+    tournamentName: {
       type: String,
       required: true,
     },
-    title: {
+    organizerName: {
       type: String,
       required: true,
-      min: 3,
-      max: 60,
     },
-    desc: {
-      type: String,
-      required: true,
-      min: 3,
-    },
-    rating: {
+    noOfTeam: {
       type: Number,
       required: true,
-      min: 0,
-      max: 5,
     },
     long: {
       type: Number,
@@ -31,13 +22,45 @@ const PinSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    address: {
+      type: String,
+      required: true,
+    },
+    startMatchDate: { type: Date, default: Date.now, required: true },
+    endMatchDate: { type: Date, default: Date.now, required: true },
+    time: {
+      type: String,
+      required: true,
+    },
+    entryFee: {
+      type: Number,
+      required: true,
+    },
+    prizeMoney: {
+      type: Number,
+      required: true,
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     pic: {
       type: String,
       default:
         "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
+    sports: {
+      type: String,
+      required: true,
+    },
+    groupLink: {
+      type: String,
+      required: true,
+      default: "",
+    },
+    joinedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );
-
 module.exports = mongoose.model("Pin", PinSchema);

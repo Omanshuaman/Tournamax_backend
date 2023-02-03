@@ -11,6 +11,8 @@ const cookieSession = require("cookie-session");
 const authRoute = require("./routes/auth");
 const pinRoute = require("./routes/pins");
 const editRoute = require("./routes/editpics");
+const joinRoute = require("./routes/join");
+const editTournamentRoute = require("./routes/myTournament");
 const posterRoutes = require("./routes/posterRoutes");
 const session = require("express-session");
 const bodyParser = require("body-parser");
@@ -35,9 +37,7 @@ app.use(passport.session());
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
     origin: "https://tournamaxsports.com",
-
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
@@ -51,10 +51,11 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRoutes);
 app.use("/api/pins", pinRoute);
 app.use("/api/edit", editRoute);
+app.use("/api/join", joinRoute);
 app.use("/api/auth", authRoute);
 
 app.use("/api/poster", posterRoutes);
-
+app.use("/api/edittournament", editTournamentRoute);
 // Error Handling middlewares
 app.use(notFound);
 app.use(errorHandler);

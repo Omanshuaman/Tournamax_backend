@@ -1,5 +1,11 @@
 const router = require("express").Router();
 const Pin = require("../models/pin");
+const {
+  fetchChats,
+  fetchJoined,
+  fetchParticpantDetail,
+} = require("../controllers/chatControllers");
+const { protect } = require("../middleware/authMiddleware");
 
 //create a pin
 router.post("/", async (req, res) => {
@@ -11,7 +17,6 @@ router.post("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 //get all pins
 router.get("/", async (req, res) => {
   try {
@@ -21,5 +26,8 @@ router.get("/", async (req, res) => {
     res.status(500).json(err);
   }
 });
+router.route("/organize").get(protect, fetchChats);
+router.route("/participate").get(protect, fetchJoined);
+router.route("/:userId").get(protect, fetchParticpantDetail);
 
 module.exports = router;
