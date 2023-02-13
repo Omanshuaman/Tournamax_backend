@@ -62,6 +62,16 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
+const getUser = asyncHandler(async (req, res) => {
+  try {
+    User.find({ _id: { _id: req.params.userId } }).then((results) => {
+      res.send(results);
+    });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error.message);
+  }
+});
 const allUsers = asyncHandler(async (req, res) => {
   const keyword = req.query.search
     ? {
@@ -76,4 +86,4 @@ const allUsers = asyncHandler(async (req, res) => {
   res.send(users);
 });
 
-module.exports = { registerUser, authUser, allUsers };
+module.exports = { registerUser, authUser, allUsers, getUser };

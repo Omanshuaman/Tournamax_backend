@@ -60,6 +60,10 @@ const PinSchema = new mongoose.Schema(
       default: "",
     },
     joinedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    rules: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
