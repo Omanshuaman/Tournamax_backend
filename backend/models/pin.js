@@ -33,11 +33,11 @@ const PinSchema = new mongoose.Schema(
       required: true,
     },
     entryFee: {
-      type: Number,
+      type: String,
       required: true,
     },
     prizeMoney: {
-      type: Number,
+      type: String,
       required: true,
     },
     createdBy: {
