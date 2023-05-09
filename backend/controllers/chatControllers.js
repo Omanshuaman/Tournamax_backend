@@ -4,7 +4,7 @@ const JoinPin = require("../models/joinpins");
 
 const renameGroup = asyncHandler(async (req, res) => {
   const { chatId, chatName } = req.body;
-
+  //testing
   const updatedChat = await Pin.findByIdAndUpdate(
     chatId,
     {
